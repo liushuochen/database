@@ -4,23 +4,10 @@ import util
 class FieldBase(object):
     def __init__(self):
         self.uuid = util.uuid_string(upper=True)
-        self.smallint = util.uuid_string(upper=True),
-        self.mediumint = util.uuid_string(upper=True),
-        self.int = util.uuid_string(upper=True)
-        self.bigint = util.uuid_string(upper=True),
-        self.smallint_unsigned = util.uuid_string(upper=True),
-        self.mediumint_unsigned = util.uuid_string(upper=True),
-        self.int_unsigned = util.uuid_string(upper=True),
-        self.bigint_unsigned = util.uuid_string(upper=True),
-        self.smallint_zerofill = util.uuid_string(upper=True),
-        self.mediumint_zerofill = util.uuid_string(upper=True),
-        self.int_zerofill = util.uuid_string(upper=True)
-        self.bigint_zerofill = util.uuid_string(upper=True)
-        self.bool = util.uuid_string(upper=True)
 
 
-class Tinyint(FieldBase):
-    def __init__(self, length=4, unsigned=False, zerofill=False):
+class IntegerNumber(FieldBase):
+    def __init__(self, length, unsigned=False, zerofill=False):
         super().__init__()
         self.length = length
         self.unsigned = unsigned
@@ -28,5 +15,64 @@ class Tinyint(FieldBase):
 
         if zerofill and (not self.unsigned):
             self.unsigned = True
-        if self.length <= 0:
-            self.length = 4
+
+
+class Tinyint(IntegerNumber):
+    def __init__(self, length=0):
+        super().__init__(length)
+        self.default_length = 4
+        if self.length < self.default_length:
+            self.length = self.default_length
+
+
+class Smallint(IntegerNumber):
+    def __init__(self, length=0):
+        super().__init__(length)
+        self.default_length = 6
+        if self.length < self.default_length:
+            self.length = self.default_length
+
+
+class Mediumint(IntegerNumber):
+    def __init__(self, length=0):
+        super().__init__(length)
+        self.default_length = 9
+        if self.length < self.default_length:
+            self.length = self.default_length
+
+
+class Int(IntegerNumber):
+    def __init__(self, length=0):
+        super().__init__(length)
+        self.default_length = 11
+        if self.length < self.default_length:
+            self.length = self.default_length
+
+
+class Bigint(IntegerNumber):
+    def __init__(self, length=0):
+        super().__init__(length)
+        self.default_length = 20
+        if self.length < self.default_length:
+            self.length = self.default_length
+
+
+class Bool(FieldBase):
+    pass
+
+
+class FloatNumber(FieldBase):
+    def __init__(self, m, n=0):
+        super().__init__()
+        self.m = m
+        self.n = n
+
+        if self.m < 0:
+            self.m = 0
+        if self.n < 0:
+            self.n = 0
+
+
+class Float(FloatNumber):
+    pass
+
