@@ -5,6 +5,9 @@ class FieldBase(object):
     def __init__(self):
         self.uuid = util.uuid_string(upper=True)
 
+    def __str__(self):
+        raise TypeError("Invalid base function called.")
+
 
 class IntegerNumber(FieldBase):
     def __init__(self, length, unsigned=False, zerofill=False):
@@ -15,6 +18,9 @@ class IntegerNumber(FieldBase):
 
         if zerofill and (not self.unsigned):
             self.unsigned = True
+
+    def __str__(self):
+        raise TypeError("Invalid base function called.")
 
 
 class Tinyint(IntegerNumber):
@@ -67,12 +73,61 @@ class FloatNumber(FieldBase):
         self.m = m
         self.n = n
 
-        if self.m < 0:
-            self.m = 0
         if self.n < 0:
             self.n = 0
+        if m < n:
+            self.m = n
+
+    def __str__(self):
+        raise TypeError("Invalid base function called.")
 
 
 class Float(FloatNumber):
     pass
 
+
+class Double(FloatNumber):
+    pass
+
+
+class Decimal(FloatNumber):
+    def __init__(self, m=10, n=0):
+        super().__init__(m, n)
+
+
+class String(FieldBase):
+    def __init__(self, length):
+        super().__init__()
+        self.length = length
+
+        if self.length < 1:
+            self.length = 1
+        if self.length > 255:
+            self.length = 255
+
+    def __str__(self):
+        raise TypeError("Invalid base function called.")
+
+
+class Char(String):
+    pass
+
+
+class Varchar(String):
+    pass
+
+
+class Datetime(FieldBase):
+    def __init__(self, date):
+        super().__init__()
+        self.year = date.year
+        self.month = date.month
+        self.day = date.day
+        self.hour = date.hour
+        self.minute = date.minute
+        self.second = date.second
+
+    def __str__(self):
+        return str(self.year) + "-" + str(self.month) + "-" + str(self.day)\
+            + " " + str(self.hour) + ":" + str(self.minute) + ":" + \
+            str(self.second)
