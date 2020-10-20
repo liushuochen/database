@@ -4,7 +4,6 @@ from obj.base import _Database
 class Table(_Database):
     def __init__(self,
                  name: str,
-                 database: str,
                  columns: list,
                  storage="InnoDB",
                  charset="utf8"
@@ -13,4 +12,14 @@ class Table(_Database):
         self.columns = columns
         self.storage = storage
         self.charset = charset
-        self.database = database
+
+    def create(self):
+        commands = [
+            "create table if not exists %s(\n" % self.name,
+        ]
+
+        for column in self.columns:
+            commands.append(str(column) + ",\n")
+        commands[-1].strip(",\n")
+        commands.append(") %s" % self.charset)
+        return "".join(commands)

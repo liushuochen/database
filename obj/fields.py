@@ -175,11 +175,17 @@ class String(FieldBase):
 
 
 class Char(String):
+    def __init__(self, length=23):
+        super().__init__(length)
+
     def __str__(self):
         return "char(%s)" % self.length
 
 
 class Varchar(String):
+    def __init__(self, length=255):
+        super().__init__(length)
+
     def __str__(self):
         return "varchar(%s)" % self.length
 
